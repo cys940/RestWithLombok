@@ -2,6 +2,7 @@ package kr.gmtc.resttest;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -29,6 +30,9 @@ public class MainActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(RestViewModel.class);
 
+        RequestAdapter adapter = new RequestAdapter(viewModel.getAll().getValue(), item -> viewModel.request(item));
+        binding.setAdapter(adapter);
+        binding.setViewModel(viewModel);
         viewModel.getCurrentLog().observe(this, s -> binding.result.setText(s));
     }
 }

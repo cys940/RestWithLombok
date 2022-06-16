@@ -44,7 +44,15 @@ public class RestViewModel extends ViewModel {
         list.setValue(samples);
     }
 
-    public void getAllDevices(){
+    public void request(String request){
+        switch (request) {
+            case "getAllDevices" : getAllDevices();
+            case "getAllCctvs" : getAllCctvs();
+            case "getSystemConfig" : getSystemConfig();
+        }
+    }
+
+    private void getAllDevices(){
         retrofit2.Call<List<Device>> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -68,12 +76,13 @@ public class RestViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<List<Device>> call, Throwable t) {
+                log.setValue(t.getMessage());
                 t.printStackTrace();
             }
         });
     }
 
-    public void getAllCctvs(){
+    private void getAllCctvs(){
         retrofit2.Call<List<Cctv>> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -97,12 +106,12 @@ public class RestViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<List<Cctv>> call, Throwable t) {
-
+                log.setValue(t.getMessage());
             }
         });
     }
 
-    public void getSystemConfig(){
+    private void getSystemConfig(){
         retrofit2.Call<SystemConfig> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -124,7 +133,7 @@ public class RestViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<SystemConfig> call, Throwable t) {
-
+                log.setValue(t.getMessage());
             }
         });
     }
