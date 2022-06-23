@@ -1,20 +1,31 @@
 package kr.gmtc.resttest;
 
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProvider;
 
+
+import javax.inject.Inject;
+
 import kr.gmtc.resttest.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding = null;
-    private RestViewModel viewModel = null;
+
+    @Inject
+    RestViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        ((AppCore)getApplication()).getComponent()
+                .mainComponent()
+                .create()
+                .inject(this);
+
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(RestViewModel.class);
 

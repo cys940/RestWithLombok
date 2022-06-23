@@ -9,6 +9,9 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import kr.gmtc.resttest.di.ActivityScope;
 import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
 import kr.gmtc.resttest.model.equip.Device;
@@ -17,12 +20,21 @@ import kr.gmtc.resttest.model.info.favorite.Favorite;
 import kr.gmtc.resttest.model.info.group.Group;
 import kr.gmtc.resttest.model.user.User;
 import kr.gmtc.resttest.rest.RestClient;
+import kr.gmtc.resttest.rest.RestService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
+import retrofit2.Retrofit;
+@ActivityScope
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
+
+    @Inject
+    Retrofit retrofit;
+    @Inject
+    public RestViewModel(){
+
+    }
 
     private MutableLiveData<List<String>> list;
 
@@ -362,16 +374,17 @@ public class RestViewModel extends ViewModel {
 
 
     public void getMyInfo(String userId) {
-        retrofit2.Call<MyInfo> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
-                .setAuthId("gmt")
-                .setAuthPw("gmtvision")
-                .setReadTimeout(3)
-                .setWriteTimeout(3)
-                .setRetryConnect(true)
-                .setRetrofit()
-                .getService()
-                .getMyInfo(userId);
+        retrofit2.Call<MyInfo> call = retrofit.create(RestService.class).getMyInfo(userId);
+        //       RestClient.getInstance()
+//                .setUrl("http://192.168.12.211", 8083)
+//                .setAuthId("gmt")
+//                .setAuthPw("gmtvision")
+//                .setReadTimeout(3)
+//                .setWriteTimeout(3)
+//                .setRetryConnect(true)
+//                .setRetrofit()
+//                .getService()
+//                .getMyInfo(userId);
 
         call.enqueue(new Callback<MyInfo>() {
             @Override
