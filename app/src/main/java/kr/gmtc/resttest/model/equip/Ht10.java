@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.model.ht08.equip;
+package kr.gmtc.resttest.model.equip;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,8 +9,7 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class SnmpDevice extends Device {
-    protected int snmpPort;
-    protected String snmpId;
-    protected String snmpPassword;
+public class Ht10 extends Terminal {
+    protected String wifi;
+    protected String ent;
 }

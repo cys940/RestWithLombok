@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.model.ht08.cfg;
+package kr.gmtc.resttest.model.cfg;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

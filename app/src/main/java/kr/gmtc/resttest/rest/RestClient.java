@@ -2,24 +2,20 @@ package kr.gmtc.resttest.rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.TypeAdapter;
-import com.google.gson.TypeAdapterFactory;
-import com.google.gson.reflect.TypeToken;
 
 import java.util.concurrent.TimeUnit;
 
-import kr.gmtc.resttest.model.ht08.equip.Device;
-import kr.gmtc.resttest.model.ht08.equip.Ht10;
-import kr.gmtc.resttest.model.ht08.equip.MainServer;
-import kr.gmtc.resttest.model.ht08.equip.Pbx;
-import kr.gmtc.resttest.model.ht08.equip.Phone;
-import kr.gmtc.resttest.model.ht08.equip.SnmpDevice;
-import kr.gmtc.resttest.model.ht08.equip.VideoRecorder;
-import lombok.val;
+import kr.gmtc.resttest.model.equip.Device;
+import kr.gmtc.resttest.model.equip.Ht10;
+import kr.gmtc.resttest.model.equip.MainServer;
+import kr.gmtc.resttest.model.equip.Phone;
+import kr.gmtc.resttest.model.equip.SnmpDevice;
+import kr.gmtc.resttest.model.equip.VideoRecorder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+
 
 public class RestClient {
     private static RestClient instance = null;
@@ -92,6 +88,7 @@ public class RestClient {
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
+                .setDateFormat("yyyyMMdd HH:mm:ss")
                 .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
                 .create();
 

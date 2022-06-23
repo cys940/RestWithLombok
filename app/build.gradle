@@ -54,7 +54,11 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.8.9'
 
+    //viewModel/liveData
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.0-rc02"
     implementation "androidx.lifecycle:lifecycle-service:2.5.0-rc02"
     implementation "androidx.lifecycle:lifecycle-livedata:2.5.0-rc02"
+
+    implementation 'com.google.dagger:dagger:2.41'
+    annotationProcessor 'com.google.dagger:dagger-compiler:2.41'
 }

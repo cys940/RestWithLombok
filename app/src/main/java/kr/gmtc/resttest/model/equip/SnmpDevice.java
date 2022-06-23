@@ -1,8 +1,7 @@
-package kr.gmtc.resttest.model.ht08.equip;
+package kr.gmtc.resttest.model.equip;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
@@ -10,6 +9,8 @@ import lombok.ToString;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString(callSuper=true)
-public class Terminal extends Phone {
-    protected int pagaZone;
+public class SnmpDevice extends Device {
+    protected int snmpPort;
+    protected String snmpId;
+    protected String snmpPassword;
 }

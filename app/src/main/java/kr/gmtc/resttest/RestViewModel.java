@@ -9,16 +9,23 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
-import kr.gmtc.resttest.model.ht08.cctv.Cctv;
-import kr.gmtc.resttest.model.ht08.cfg.SystemConfig;
-import kr.gmtc.resttest.model.ht08.equip.Device;
+import kr.gmtc.resttest.model.cctv.Cctv;
+import kr.gmtc.resttest.model.cfg.SystemConfig;
+import kr.gmtc.resttest.model.equip.Device;
+import kr.gmtc.resttest.model.info.MyInfo;
+import kr.gmtc.resttest.model.info.favorite.Favorite;
+import kr.gmtc.resttest.model.info.group.Group;
+import kr.gmtc.resttest.model.user.User;
 import kr.gmtc.resttest.rest.RestClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class RestViewModel extends ViewModel {
+    private static final String TAG = "RestViewModel";
+
     private MutableLiveData<List<String>> list;
+
     public LiveData<List<String>> getAll() {
         if (list == null) {
             list = new MutableLiveData<List<String>>();
@@ -28,6 +35,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<String> log;
+
     public LiveData<String> getCurrentLog() {
         if (log == null) {
             log = new MutableLiveData<String>();
@@ -35,24 +43,72 @@ public class RestViewModel extends ViewModel {
         return log;
     }
 
-    private void fetch(){
+    private MutableLiveData<List<Device>> devices;
+
+    public LiveData<List<Device>> getDevices() {
+        if (devices == null) {
+            devices = new MutableLiveData<List<Device>>();
+        }
+        return devices;
+    }
+
+    private void fetch() {
         List<String> samples = new ArrayList<>();
         samples.add("getAllDevices");
         samples.add("getAllCctvs");
         samples.add("getSystemConfig");
+        samples.add("getAllUsers");
+        samples.add("getUser");
+        samples.add("getFavorite");
+        samples.add("updateFavorite");
+        samples.add("deleteFavorite");
+        samples.add("getAllGroups");
+        samples.add("getMyInfo");
 
         list.setValue(samples);
     }
 
-    public void request(String request){
+    public void request(String request) {
         switch (request) {
-            case "getAllDevices" : getAllDevices();
-            case "getAllCctvs" : getAllCctvs();
-            case "getSystemConfig" : getSystemConfig();
+            case "getAllDevices":
+                getAllDevices();
+                break;
+            case "getAllCctvs":
+                getAllCctvs();
+                break;
+            case "getSystemConfig":
+                getSystemConfig();
+                break;
+            case "getAllUsers":
+                getAllUsers();
+                break;
+            case "getUser":
+                getUser("003");
+                break;
+            case "getFavorite":
+                getFavorite("003");
+                break;
+            case "updateFavorite":
+                updateFavorite("003", Favorite.builder()
+                        .id(11)
+                        .userId("003")
+                        .destType(0)
+                        .destId("218")
+                        .build());
+                break;
+            case "deleteFavorte":
+                deleteFavorite("003", 1);
+                break;
+            case "getAllGroups":
+                getAllGroups("003");
+                break;
+            case "getMyInfo":
+                getMyInfo("003");
+                break;
         }
     }
 
-    private void getAllDevices(){
+    private void getAllDevices() {
         retrofit2.Call<List<Device>> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -68,8 +124,8 @@ public class RestViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<Device>> call, Response<List<Device>> response) {
                 if (response.isSuccessful()) {
-                    for (Device allDevice : response.body()){
-                        log.setValue(allDevice.toString());
+                    for (Device allDevice : response.body()) {
+                        Log.d(TAG, allDevice.toString());
                     }
                 }
             }
@@ -82,7 +138,7 @@ public class RestViewModel extends ViewModel {
         });
     }
 
-    private void getAllCctvs(){
+    private void getAllCctvs() {
         retrofit2.Call<List<Cctv>> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -98,7 +154,7 @@ public class RestViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<Cctv>> call, Response<List<Cctv>> response) {
                 if (response.isSuccessful()) {
-                    for (Cctv cctv : response.body()){
+                    for (Cctv cctv : response.body()) {
                         log.setValue(cctv.toString());
                     }
                 }
@@ -111,7 +167,7 @@ public class RestViewModel extends ViewModel {
         });
     }
 
-    private void getSystemConfig(){
+    private void getSystemConfig() {
         retrofit2.Call<SystemConfig> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -133,6 +189,200 @@ public class RestViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<SystemConfig> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void getAllUsers() {
+        retrofit2.Call<List<User>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getAllUsers();
+
+        call.enqueue(new Callback<List<User>>() {
+            @Override
+            public void onResponse(Call<List<User>> call, Response<List<User>> response) {
+                if (response.isSuccessful()) {
+                    for (User user : response.body()) {
+                        Log.d(TAG, user.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<User>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void getUser(String userId) {
+        retrofit2.Call<User> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getUser(userId);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void getFavorite(String userId) {
+        retrofit2.Call<Favorite> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getFavorite(userId);
+
+        call.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void updateFavorite(String userId, Favorite update) {
+        retrofit2.Call<Favorite> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .updateFavorite(userId, update);
+
+        call.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void deleteFavorite(String userId, int id) {
+        retrofit2.Call<Favorite> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .deleteFavorite(userId, id);
+
+        call.enqueue(new Callback<Favorite>() {
+            @Override
+            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Favorite> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void getAllGroups(String userId) {
+        retrofit2.Call<List<Group>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getAllGroups(userId);
+
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                   for (Group group : response.body())
+                       Log.d(TAG, group.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+
+
+    public void getMyInfo(String userId) {
+        retrofit2.Call<MyInfo> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getMyInfo(userId);
+
+        call.enqueue(new Callback<MyInfo>() {
+            @Override
+            public void onResponse(Call<MyInfo> call, Response<MyInfo> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<MyInfo> call, Throwable t) {
                 log.setValue(t.getMessage());
             }
         });

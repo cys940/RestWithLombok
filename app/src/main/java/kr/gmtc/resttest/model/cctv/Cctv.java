@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.model.ht08.cctv;
+package kr.gmtc.resttest.model.cctv;
 
 import java.util.ArrayList;
 import java.util.List;
