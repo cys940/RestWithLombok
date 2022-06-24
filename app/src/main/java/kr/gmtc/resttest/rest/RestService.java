@@ -45,7 +45,16 @@ public interface RestService {
     Call<Favorite> deleteFavorite(@Path("userId") String userId, @Path("id") int id);
 
     @GET("/iscs/myinfo/{userId}/groups")
-    Call<List<Group>> getAllGroups(@Path("userId") String userId);
+    Call<List<Group>> getGroupsByGet(@Path("userId") String userId);
+
+    @POST("/iscs/myinfo/{userId}/groups")
+    Call<List<Group>> getGroupsByPost(@Path("userId") String userId, @Body List<Group> groups);
+
+    @DELETE("/iscs/myinfo/{userId}/groups/{groupId}")
+    Call<List<Group>> deleteGroups(@Path("userId") String userId, @Path("groupId") String groupId);
+
+    @PUT("/iscs/myinfo/{userId}/groups")
+    Call<List<Group>> updateGroups(@Path("userId") String userId);
 
     @GET("/iscs/myinfo/{userId}")
     Call<MyInfo> getMyInfo(@Path("userId") String userId);

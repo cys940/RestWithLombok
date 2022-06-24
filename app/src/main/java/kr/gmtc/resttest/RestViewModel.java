@@ -6,12 +6,8 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.inject.Inject;
 
 import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
@@ -26,7 +22,7 @@ import kr.gmtc.resttest.rest.RestClient;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
+
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
 
@@ -74,7 +70,10 @@ public class RestViewModel extends ViewModel {
         samples.add("getFavorite");
         samples.add("updateFavorite");
         samples.add("deleteFavorite");
-        samples.add("getAllGroups");
+        samples.add("getGroupsByGet");
+        samples.add("getGroupsByPost");
+        samples.add("deleteGroups");
+        samples.add("updateGroups");
         samples.add("getMyInfo");
         samples.add("getWhaleSafeByGet");
         samples.add("getWhaleSafeByPost");
@@ -113,8 +112,17 @@ public class RestViewModel extends ViewModel {
             case "deleteFavorite":
                 deleteFavorite("003", 1);
                 break;
-            case "getAllGroups":
-                getAllGroups("003");
+            case "getGroupsByGet":
+                getGroupsByGet("003");
+                break;
+            case "getGroupsByPost":
+                getGroupsByPost("003", null);
+                break;
+            case "deleteGroups":
+                deleteGroups("003", "10");
+                break;
+            case "updateGroups":
+                updateGroups("003");
                 break;
             case "getMyInfo":
                 getMyInfo("003");
@@ -126,6 +134,90 @@ public class RestViewModel extends ViewModel {
                 getWhaleSafeByPost();
                 break;
         }
+    }
+
+    private void updateGroups(String userId) {
+        retrofit2.Call<List<Group>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .updateGroups(userId);
+
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                    for (Group group : response.body())
+                        Log.d(TAG, group.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    private void deleteGroups(String userId, String groupId) {
+        retrofit2.Call<List<Group>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .deleteGroups(userId, groupId);
+
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                    for (Group group : response.body())
+                        Log.d(TAG, group.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    private void getGroupsByPost(String userId, List<Group> groups) {
+        retrofit2.Call<List<Group>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getGroupsByPost(userId, groups);
+
+        call.enqueue(new Callback<List<Group>>() {
+            @Override
+            public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
+                if (response.isSuccessful()) {
+                    for (Group group : response.body())
+                        Log.d(TAG, group.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Group>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
     }
 
     private void getAllDevices() {
@@ -351,7 +443,7 @@ public class RestViewModel extends ViewModel {
         });
     }
 
-    public void getAllGroups(String userId) {
+    public void getGroupsByGet(String userId) {
         retrofit2.Call<List<Group>> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
                 .setAuthId("gmt")
@@ -361,7 +453,7 @@ public class RestViewModel extends ViewModel {
                 .setRetryConnect(true)
                 .setRetrofit()
                 .getService()
-                .getAllGroups(userId);
+                .getGroupsByGet(userId);
 
         call.enqueue(new Callback<List<Group>>() {
             @Override
