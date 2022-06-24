@@ -9,6 +9,10 @@ import androidx.lifecycle.ViewModel;
 import java.util.ArrayList;
 import java.util.List;
 
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.lifecycle.HiltViewModel;
 import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
 import kr.gmtc.resttest.model.equip.Device;
@@ -19,12 +23,20 @@ import kr.gmtc.resttest.model.user.User;
 import kr.gmtc.resttest.model.whale.SafeProperty;
 import kr.gmtc.resttest.model.whale.WhaleSafe;
 import kr.gmtc.resttest.rest.RestClient;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+@HiltViewModel
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
+
+    @Inject
+    public RestViewModel(){
+
+    }
 
     private MutableLiveData<List<String>> list;
     public LiveData<List<String>> getAll() {

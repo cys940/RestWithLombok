@@ -12,8 +12,9 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import kr.gmtc.resttest.databinding.ActivityMainBinding;
+import kr.gmtc.resttest.rest.RestService;
 
-
+@AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding = null;
     private RestViewModel viewModel;
