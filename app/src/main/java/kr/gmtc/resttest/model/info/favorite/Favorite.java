@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.info.favorite;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,9 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class Favorite {
-    protected Integer id;
-    protected String userId;
-    protected Integer destType;
-    protected String destId;
+    @SerializedName("id") protected Integer id;
+    @SerializedName("userId") protected String userId;
+    @SerializedName("destType") protected Integer destType;
+    @SerializedName("destId") protected String destId;
 }
 

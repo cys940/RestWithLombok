@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.equip;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,6 +12,6 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper=true)
 public class Ht10 extends Terminal {
-    protected String wifi;
-    protected String ent;
+    @SerializedName("wifi") protected String wifi;
+    @SerializedName("ent") protected String ent;
 }

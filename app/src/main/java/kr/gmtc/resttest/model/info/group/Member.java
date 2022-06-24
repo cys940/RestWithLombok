@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.info.group;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,9 +15,9 @@ import java.util.Objects;
 @NoArgsConstructor
 @Builder
 public class Member implements Serializable {
-    protected Integer groupId;
-    protected Integer memberType;
-    protected String memberId;
+    @SerializedName("groupId") protected Integer groupId;
+    @SerializedName("memberType") protected Integer memberType;
+    @SerializedName("memberId") protected String memberId;
 
     @Override
     public boolean equals(Object o) {

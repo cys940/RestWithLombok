@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.equip;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,10 +12,10 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper=true)
 public class MainServer extends Device {
-    protected String autoDelete;
-    protected int remainDays;
-    protected String autoBackupType;
-    protected int backupCycle;
-    protected int backupHour;
-    protected int limitCapacity;
+    @SerializedName("autoDelete") protected String autoDelete;
+    @SerializedName("remainDays") protected int remainDays;
+    @SerializedName("autoBackupType") protected String autoBackupType;
+    @SerializedName("backupCycle") protected int backupCycle;
+    @SerializedName("backupHour") protected int backupHour;
+    @SerializedName("limitCapacity") protected int limitCapacity;
 }

@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.info.group;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +15,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class Group  {
-    protected Integer id;
-    protected String name;
-    protected String userId;
-    protected List<Member> members = new ArrayList<>();
+    @SerializedName("id") protected Integer id;
+    @SerializedName("name") protected String name;
+    @SerializedName("userId") protected String userId;
+    @SerializedName("members") protected List<Member> members = new ArrayList<>();
 }

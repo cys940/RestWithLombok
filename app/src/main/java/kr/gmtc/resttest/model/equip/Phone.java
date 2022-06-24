@@ -1,5 +1,7 @@
 package kr.gmtc.resttest.model.equip;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,8 @@ import lombok.ToString;
 @NoArgsConstructor
 @ToString(callSuper=true)
 public class Phone extends Device {
-    protected String dialNo;
-    protected Integer lineNo;
-    protected String roomNo;
-    protected String pbxId;
+    @SerializedName("dialNo") protected String dialNo;
+    @SerializedName("lineNo") protected Integer lineNo;
+    @SerializedName("roomNo") protected String roomNo;
+    @SerializedName("pbxId") protected String pbxId;
 }

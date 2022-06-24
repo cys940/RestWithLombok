@@ -1,19 +1,23 @@
 package kr.gmtc.resttest.model.user;
 
+import com.google.gson.annotations.SerializedName;
+
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserAuth {
-    protected Integer authId;
-    protected String use;
-    protected String name;
-    protected Integer menuCode;
-    protected String equipId;
-    protected Integer functionType;
-    protected Integer alarmType;
-    protected Integer alarmLevel;
+    @SerializedName("authId") protected Integer authId;
+    @SerializedName("use") protected String use;
+    @SerializedName("name") protected String name;
+    @SerializedName("menuCode") protected Integer menuCode;
+    @SerializedName("equipId") protected String equipId;
+    @SerializedName("functionType") protected Integer functionType;
+    @SerializedName("alarmType") protected Integer alarmType;
+    @SerializedName("alarmLevel") protected Integer alarmLevel;
 }
