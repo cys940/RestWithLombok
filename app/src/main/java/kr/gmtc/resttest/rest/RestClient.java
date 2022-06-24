@@ -88,7 +88,7 @@ public class RestClient {
 
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
-                .setDateFormat("yyyyMMdd HH:mm:ss")
+                .setDateFormat("yyyy-MM-dd HH:mm:ss")
                 .registerTypeAdapterFactory(runtimeTypeAdapterFactory)
                 .create();
 

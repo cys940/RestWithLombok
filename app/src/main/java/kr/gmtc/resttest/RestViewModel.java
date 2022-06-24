@@ -6,12 +6,13 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
-import kr.gmtc.resttest.di.ActivityScope;
 import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
 import kr.gmtc.resttest.model.equip.Device;
@@ -19,25 +20,17 @@ import kr.gmtc.resttest.model.info.MyInfo;
 import kr.gmtc.resttest.model.info.favorite.Favorite;
 import kr.gmtc.resttest.model.info.group.Group;
 import kr.gmtc.resttest.model.user.User;
+import kr.gmtc.resttest.model.whale.SafeProperty;
+import kr.gmtc.resttest.model.whale.WhaleSafe;
 import kr.gmtc.resttest.rest.RestClient;
-import kr.gmtc.resttest.rest.RestService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-@ActivityScope
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
 
-    @Inject
-    Retrofit retrofit;
-    @Inject
-    public RestViewModel(){
-
-    }
-
     private MutableLiveData<List<String>> list;
-
     public LiveData<List<String>> getAll() {
         if (list == null) {
             list = new MutableLiveData<List<String>>();
@@ -56,12 +49,19 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<Device>> devices;
-
     public LiveData<List<Device>> getDevices() {
         if (devices == null) {
             devices = new MutableLiveData<List<Device>>();
         }
         return devices;
+    }
+
+    private MutableLiveData<List<WhaleSafe>> _whaleSafes = new MutableLiveData<>();
+    public LiveData<List<WhaleSafe>> getWhaleSafes() {
+        if (_whaleSafes == null) {
+            _whaleSafes = new MutableLiveData<List<WhaleSafe>>();
+        }
+        return _whaleSafes;
     }
 
     private void fetch() {
@@ -76,6 +76,8 @@ public class RestViewModel extends ViewModel {
         samples.add("deleteFavorite");
         samples.add("getAllGroups");
         samples.add("getMyInfo");
+        samples.add("getWhaleSafeByGet");
+        samples.add("getWhaleSafeByPost");
 
         list.setValue(samples);
     }
@@ -108,7 +110,7 @@ public class RestViewModel extends ViewModel {
                         .destId("218")
                         .build());
                 break;
-            case "deleteFavorte":
+            case "deleteFavorite":
                 deleteFavorite("003", 1);
                 break;
             case "getAllGroups":
@@ -116,6 +118,12 @@ public class RestViewModel extends ViewModel {
                 break;
             case "getMyInfo":
                 getMyInfo("003");
+                break;
+            case "getWhaleSafeByGet":
+                getWhaleSafeByGet();
+                break;
+            case "getWhaleSafeByPost":
+                getWhaleSafeByPost();
                 break;
         }
     }
@@ -374,17 +382,16 @@ public class RestViewModel extends ViewModel {
 
 
     public void getMyInfo(String userId) {
-        retrofit2.Call<MyInfo> call = retrofit.create(RestService.class).getMyInfo(userId);
-        //       RestClient.getInstance()
-//                .setUrl("http://192.168.12.211", 8083)
-//                .setAuthId("gmt")
-//                .setAuthPw("gmtvision")
-//                .setReadTimeout(3)
-//                .setWriteTimeout(3)
-//                .setRetryConnect(true)
-//                .setRetrofit()
-//                .getService()
-//                .getMyInfo(userId);
+        retrofit2.Call<MyInfo> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getMyInfo(userId);
 
         call.enqueue(new Callback<MyInfo>() {
             @Override
@@ -396,6 +403,76 @@ public class RestViewModel extends ViewModel {
 
             @Override
             public void onFailure(Call<MyInfo> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
+    }
+
+    public void getWhaleSafeByGet() {
+        retrofit2.Call<List<WhaleSafe>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getWhaleSafeByGet();
+
+        call.enqueue(new Callback<List<WhaleSafe>>() {
+            @Override
+            public void onResponse(Call<List<WhaleSafe>> call, Response<List<WhaleSafe>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                    _whaleSafes.setValue(response.body());
+                } else {
+                    Log.d(TAG, "failed");
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WhaleSafe>> call, Throwable t) {
+                log.setValue(t.getMessage());
+                Log.d(TAG, "faild : " + t.getMessage());
+            }
+        });
+    }
+
+    public void getWhaleSafeByPost() {
+        List<WhaleSafe> list = _whaleSafes.getValue();
+
+        if (list == null)
+            return;
+
+        for (WhaleSafe whaleSafe : list) {
+            whaleSafe.setId(null);
+            for (SafeProperty property: whaleSafe.getProperties()) {
+                property.setId(null);
+            }
+        }
+
+        retrofit2.Call<List<WhaleSafe>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getWhaleSafeByPost(list);
+
+        call.enqueue(new Callback<List<WhaleSafe>>() {
+            @Override
+            public void onResponse(Call<List<WhaleSafe>> call, Response<List<WhaleSafe>> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<WhaleSafe>> call, Throwable t) {
                 log.setValue(t.getMessage());
             }
         });

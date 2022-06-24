@@ -10,21 +10,17 @@ import androidx.lifecycle.ViewModelProvider;
 
 import javax.inject.Inject;
 
+import dagger.hilt.android.AndroidEntryPoint;
 import kr.gmtc.resttest.databinding.ActivityMainBinding;
+
 
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding = null;
-
-    @Inject
-    RestViewModel viewModel;
+    private RestViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ((AppCore)getApplication()).getComponent()
-                .mainComponent()
-                .create()
-                .inject(this);
 
         binding = DataBindingUtil.setContentView(this,R.layout.activity_main);
         viewModel = new ViewModelProvider(this).get(RestViewModel.class);
