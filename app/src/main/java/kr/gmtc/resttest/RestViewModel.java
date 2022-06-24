@@ -379,8 +379,6 @@ public class RestViewModel extends ViewModel {
         });
     }
 
-
-
     public void getMyInfo(String userId) {
         retrofit2.Call<MyInfo> call = RestClient.getInstance()
                 .setUrl("http://192.168.12.211", 8083)
