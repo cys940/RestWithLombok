@@ -19,7 +19,6 @@ public class Device {
     @SerializedName("modelName")  protected String modelName;
     @SerializedName("remark")  protected String remark;
     @SerializedName("companyName")  protected String companyName;
-    //protected Integer maxSession;
     @SerializedName("authType")  protected Integer authType;
     @SerializedName("authValue")  protected String authValue;
     @SerializedName("firmwareVersion")  protected String firmwareVersion;

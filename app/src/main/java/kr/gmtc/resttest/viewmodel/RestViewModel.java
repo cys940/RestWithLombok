@@ -1,4 +1,4 @@
-package kr.gmtc.resttest;
+package kr.gmtc.resttest.viewmodel;
 
 import android.util.Log;
 
@@ -13,12 +13,17 @@ import java.util.List;
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
+import dagger.hilt.android.qualifiers.ApplicationContext;
+import kr.gmtc.resttest.data.RestRepository;
 import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
 import kr.gmtc.resttest.model.equip.Device;
 import kr.gmtc.resttest.model.info.MyInfo;
+import kr.gmtc.resttest.model.info.auth.UserAuth;
+import kr.gmtc.resttest.model.info.config.UserConfig;
 import kr.gmtc.resttest.model.info.favorite.Favorite;
 import kr.gmtc.resttest.model.info.group.Group;
+import kr.gmtc.resttest.model.info.schedule.Schedule;
 import kr.gmtc.resttest.model.user.User;
 import kr.gmtc.resttest.model.whale.SafeProperty;
 import kr.gmtc.resttest.model.whale.WhaleSafe;
@@ -32,6 +37,7 @@ import retrofit2.Response;
 @HiltViewModel
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
+    @Inject RestRepository repository;
 
     @Inject
     public RestViewModel(){
@@ -47,8 +53,7 @@ public class RestViewModel extends ViewModel {
         return list;
     }
 
-    private MutableLiveData<String> log;
-
+    private MutableLiveData<String> log = new MutableLiveData<>();
     public LiveData<String> getCurrentLog() {
         if (log == null) {
             log = new MutableLiveData<String>();
@@ -56,12 +61,20 @@ public class RestViewModel extends ViewModel {
         return log;
     }
 
-    private MutableLiveData<List<Device>> devices;
+    private MutableLiveData<List<Device>> devices = new MutableLiveData<>();
     public LiveData<List<Device>> getDevices() {
         if (devices == null) {
             devices = new MutableLiveData<List<Device>>();
         }
         return devices;
+    }
+
+    private MutableLiveData<List<Favorite>> _Favorites = new MutableLiveData<>();
+    public LiveData<List<Favorite>> getFavorites() {
+        if (_Favorites == null) {
+            _Favorites = new MutableLiveData<List<Favorite>>();
+        }
+        return _Favorites;
     }
 
     private MutableLiveData<List<WhaleSafe>> _whaleSafes = new MutableLiveData<>();
@@ -70,6 +83,22 @@ public class RestViewModel extends ViewModel {
             _whaleSafes = new MutableLiveData<List<WhaleSafe>>();
         }
         return _whaleSafes;
+    }
+
+    private MutableLiveData<UserConfig> _userConfig = new MutableLiveData<>();
+    public LiveData<UserConfig> getUserConfig() {
+        if (_userConfig == null) {
+            _userConfig = new MutableLiveData<UserConfig>();
+        }
+        return _userConfig;
+    }
+
+    private MutableLiveData<List<Group>> _groups = new MutableLiveData<>();
+    public LiveData<List<Group>> getGroups() {
+        if (_groups == null) {
+            _groups = new MutableLiveData<List<Group>>();
+        }
+        return _groups;
     }
 
     private void fetch() {
@@ -89,6 +118,10 @@ public class RestViewModel extends ViewModel {
         samples.add("getMyInfo");
         samples.add("getWhaleSafeByGet");
         samples.add("getWhaleSafeByPost");
+        samples.add("getSchedules");
+        samples.add("getUserConfigByGet");
+        samples.add("getUserConfigByPost");
+        samples.add("getUserAuths");
 
         list.setValue(samples);
     }
@@ -115,14 +148,14 @@ public class RestViewModel extends ViewModel {
                 break;
             case "updateFavorite":
                 updateFavorite("003", Favorite.builder()
-                        .id(11)
+                        .id(null)
                         .userId("003")
                         .destType(0)
-                        .destId("218")
+                        .destId("219")
                         .build());
                 break;
             case "deleteFavorite":
-                deleteFavorite("003", 1);
+                deleteFavorite("003", 18);
                 break;
             case "getGroupsByGet":
                 getGroupsByGet("003");
@@ -131,7 +164,7 @@ public class RestViewModel extends ViewModel {
                 getGroupsByPost("003", null);
                 break;
             case "deleteGroups":
-                deleteGroups("003", "10");
+                deleteGroups("003", "1093");
                 break;
             case "updateGroups":
                 updateGroups("003");
@@ -145,12 +178,139 @@ public class RestViewModel extends ViewModel {
             case "getWhaleSafeByPost":
                 getWhaleSafeByPost();
                 break;
+            case "getSchedules":
+                getSchedules("003");
+                break;
+            case "getUserConfigByGet":
+                getUserConfigByGet("003");
+                break;
+            case "getUserConfigByPost":
+                getUserConfigByPost("003", null);
+                break;
+            case "getUserAuths":
+                getUserAuths("003");
+                break;
         }
+    }
+
+    private void getUserAuths(String userId) {
+        retrofit2.Call<List<UserAuth>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getUserAuths(userId);
+
+        call.enqueue(new Callback<List<UserAuth>>() {
+            @Override
+            public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
+                if (response.isSuccessful()) {
+                    for (UserAuth auth : response.body()){
+                        Log.d(TAG, auth.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<UserAuth>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void getUserConfigByGet(String userId) {
+        retrofit2.Call<UserConfig> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getUserConfigByGet(userId);
+
+        call.enqueue(new Callback<UserConfig>() {
+            @Override
+            public void onResponse(Call<UserConfig> call, Response<UserConfig> response) {
+                if (response.isSuccessful()) {
+                    _userConfig.setValue( response.body());
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserConfig> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void getUserConfigByPost(String userId, UserConfig userConfig) {
+        UserConfig _userConfig = getUserConfig().getValue();
+        _userConfig.setDateType(0);
+
+        retrofit2.Call<UserConfig> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getUserConfigByPost(userId, _userConfig);
+
+        call.enqueue(new Callback<UserConfig>() {
+            @Override
+            public void onResponse(Call<UserConfig> call, Response<UserConfig> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<UserConfig> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+    }
+
+    private void getSchedules(String userId) {
+        retrofit2.Call<List<Schedule>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.211", 8083)
+                .setAuthId("gmt")
+                .setAuthPw("gmtvision")
+                .setReadTimeout(3)
+                .setWriteTimeout(3)
+                .setRetryConnect(true)
+                .setRetrofit()
+                .getService()
+                .getSchedules(userId);
+
+        call.enqueue(new Callback<List<Schedule>>() {
+            @Override
+            public void onResponse(Call<List<Schedule>> call, Response<List<Schedule>> response) {
+                if (response.isSuccessful()) {
+                    for (Schedule schedule : response.body())
+                        Log.d(TAG, schedule.toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Schedule>> call, Throwable t) {
+                log.setValue(t.getMessage());
+            }
+        });
     }
 
     private void updateGroups(String userId) {
         retrofit2.Call<List<Group>> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -178,7 +338,7 @@ public class RestViewModel extends ViewModel {
 
     private void deleteGroups(String userId, String groupId) {
         retrofit2.Call<List<Group>> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -205,8 +365,10 @@ public class RestViewModel extends ViewModel {
     }
 
     private void getGroupsByPost(String userId, List<Group> groups) {
+        List<Group> list = getGroups().getValue();
+
         retrofit2.Call<List<Group>> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -214,7 +376,7 @@ public class RestViewModel extends ViewModel {
                 .setRetryConnect(true)
                 .setRetrofit()
                 .getService()
-                .getGroupsByPost(userId, groups);
+                .getGroupsByPost(userId, list);
 
         call.enqueue(new Callback<List<Group>>() {
             @Override
@@ -375,8 +537,8 @@ public class RestViewModel extends ViewModel {
     }
 
     public void getFavorite(String userId) {
-        retrofit2.Call<Favorite> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+        retrofit2.Call<List<Favorite>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -386,24 +548,29 @@ public class RestViewModel extends ViewModel {
                 .getService()
                 .getFavorite(userId);
 
-        call.enqueue(new Callback<Favorite>() {
+        call.enqueue(new Callback<List<Favorite>>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(Call<List<Favorite>> call, Response<List<Favorite>> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, response.body().toString());
+
+                    _Favorites.setValue(response.body());
                 }
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
-                log.setValue(t.getMessage());
+            public void onFailure(Call<List<Favorite>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
             }
         });
     }
 
     public void updateFavorite(String userId, Favorite update) {
-        retrofit2.Call<Favorite> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+        List<Favorite> favorites = getFavorites().getValue();
+        favorites.add(update);
+
+        retrofit2.Call<List<Favorite>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -411,26 +578,26 @@ public class RestViewModel extends ViewModel {
                 .setRetryConnect(true)
                 .setRetrofit()
                 .getService()
-                .updateFavorite(userId, update);
+                .updateFavorite(userId, favorites);
 
-        call.enqueue(new Callback<Favorite>() {
+        call.enqueue(new Callback<List<Favorite>>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(Call<List<Favorite>> call, Response<List<Favorite>> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, response.body().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
+            public void onFailure(Call<List<Favorite>> call, Throwable t) {
                 log.setValue(t.getMessage());
             }
         });
     }
 
     public void deleteFavorite(String userId, int id) {
-        retrofit2.Call<Favorite> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+        retrofit2.Call<List<Favorite>> call = RestClient.getInstance()
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -440,16 +607,16 @@ public class RestViewModel extends ViewModel {
                 .getService()
                 .deleteFavorite(userId, id);
 
-        call.enqueue(new Callback<Favorite>() {
+        call.enqueue(new Callback<List<Favorite>>() {
             @Override
-            public void onResponse(Call<Favorite> call, Response<Favorite> response) {
+            public void onResponse(Call<List<Favorite>> call, Response<List<Favorite>> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, response.body().toString());
                 }
             }
 
             @Override
-            public void onFailure(Call<Favorite> call, Throwable t) {
+            public void onFailure(Call<List<Favorite>> call, Throwable t) {
                 log.setValue(t.getMessage());
             }
         });
@@ -457,7 +624,7 @@ public class RestViewModel extends ViewModel {
 
     public void getGroupsByGet(String userId) {
         retrofit2.Call<List<Group>> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)
@@ -471,6 +638,8 @@ public class RestViewModel extends ViewModel {
             @Override
             public void onResponse(Call<List<Group>> call, Response<List<Group>> response) {
                 if (response.isSuccessful()) {
+                    _groups.setValue(response.body());
+
                    for (Group group : response.body())
                        Log.d(TAG, group.toString());
                 }
@@ -485,7 +654,7 @@ public class RestViewModel extends ViewModel {
 
     public void getMyInfo(String userId) {
         retrofit2.Call<MyInfo> call = RestClient.getInstance()
-                .setUrl("http://192.168.12.211", 8083)
+                .setUrl("http://192.168.12.10", 8083)
                 .setAuthId("gmt")
                 .setAuthPw("gmtvision")
                 .setReadTimeout(3)

@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.model.info.group;
+package kr.gmtc.resttest.model.info.transfer;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -7,15 +7,13 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.io.Serializable;
-import java.util.Objects;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Member implements Serializable {
+public class Transfer {
     @SerializedName("id") protected Integer id;
-    @SerializedName("joinType") protected Integer joinType;
-    @SerializedName("joinId") protected String joinId;
+    @SerializedName("userId") protected String userId;
+    @SerializedName("equipId") protected String equipId;
 }

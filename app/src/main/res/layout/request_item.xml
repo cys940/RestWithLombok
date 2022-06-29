@@ -10,7 +10,7 @@
 
         <variable
             name="onRequestListener"
-            type="kr.gmtc.resttest.OnRequestListener" />
+            type="kr.gmtc.resttest.ui.OnRequestListener" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

@@ -7,8 +7,11 @@ import kr.gmtc.resttest.model.cctv.Cctv;
 import kr.gmtc.resttest.model.cfg.SystemConfig;
 import kr.gmtc.resttest.model.equip.Device;
 import kr.gmtc.resttest.model.info.MyInfo;
+import kr.gmtc.resttest.model.info.auth.UserAuth;
+import kr.gmtc.resttest.model.info.config.UserConfig;
 import kr.gmtc.resttest.model.info.favorite.Favorite;
 import kr.gmtc.resttest.model.info.group.Group;
+import kr.gmtc.resttest.model.info.schedule.Schedule;
 import kr.gmtc.resttest.model.user.User;
 import kr.gmtc.resttest.model.whale.WhaleSafe;
 import retrofit2.Call;
@@ -36,13 +39,13 @@ public interface RestService {
     Call<User> getUser(@Path("userId") String userId);
 
     @GET("iscs/myinfo/{userId}/favorite")
-    Call<Favorite> getFavorite(@Path("userId") String userId);
+    Call<List<Favorite>> getFavorite(@Path("userId") String userId);
 
     @PUT("/iscs/myinfo/{userId}/favorite")
-    Call<Favorite> updateFavorite(@Path("userId") String userId, @Body Favorite update);
+    Call<List<Favorite>> updateFavorite(@Path("userId") String userId, @Body List<Favorite> update);
 
     @DELETE("/iscs/myinfo/{userId}/favorite/{id}")
-    Call<Favorite> deleteFavorite(@Path("userId") String userId, @Path("id") int id);
+    Call<List<Favorite>> deleteFavorite(@Path("userId") String userId, @Path("id") int id);
 
     @GET("/iscs/myinfo/{userId}/groups")
     Call<List<Group>> getGroupsByGet(@Path("userId") String userId);
@@ -64,4 +67,16 @@ public interface RestService {
 
     @POST("/whale/safe")
     Call<List<WhaleSafe>> getWhaleSafeByPost(@Body List<WhaleSafe> body);
+
+    @GET("/iscs/myinfo/{userId}/schedule")
+    Call<List<Schedule>> getSchedules(@Path("userId") String userId);
+
+    @GET("/iscs/myinfo/{userId}/config")
+    Call<UserConfig> getUserConfigByGet(@Path("userId") String userId);
+
+    @POST("/iscs/myinfo/{userId}/config")
+    Call<UserConfig> getUserConfigByPost(@Path("userId") String userId, @Body UserConfig userConfig);
+
+    @GET("/iscs/myinfo/{userId}/auth")
+    Call<List<UserAuth>> getUserAuths(@Path("userId") String userId);
 }

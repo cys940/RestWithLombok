@@ -1,8 +1,7 @@
-package kr.gmtc.resttest;
+package kr.gmtc.resttest.ui;
 
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -10,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import kr.gmtc.resttest.databinding.RequestItemBinding;
+import kr.gmtc.resttest.ui.OnRequestListener;
 
 public class RequestAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private List<String> list = null;

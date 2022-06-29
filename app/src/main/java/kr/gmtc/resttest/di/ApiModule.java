@@ -14,9 +14,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.components.ActivityComponent;
-import dagger.hilt.android.components.ActivityRetainedComponent;
+import dagger.hilt.android.scopes.ViewModelScoped;
+import dagger.hilt.android.scopes.ViewScoped;
 import dagger.hilt.components.SingletonComponent;
+import kr.gmtc.resttest.data.RestRepository;
 import kr.gmtc.resttest.model.equip.Device;
 import kr.gmtc.resttest.model.equip.Ht10;
 import kr.gmtc.resttest.model.equip.MainServer;
@@ -46,8 +47,8 @@ public class ApiModule {
 
     }
 
-    @Provides
     @Singleton
+    @Provides
     @Named("runtimeFactoryProvides")
     public static RuntimeTypeAdapterFactory<Device> provideRuntimeFactory() {
         return  RuntimeTypeAdapterFactory.of(Device.class, "equipType")
@@ -59,8 +60,8 @@ public class ApiModule {
                 .registerSubtype(SnmpDevice.class, "SnmpDevice");
     }
 
-    @Provides
     @Singleton
+    @Provides
     @Named("gsonProvides")
     public static Gson provideGson(RuntimeTypeAdapterFactory<Device> runtimeTypeAdapterFactory) {
         return new GsonBuilder()
@@ -70,23 +71,23 @@ public class ApiModule {
                 .create();
     }
 
-    @Provides
     @Singleton
+    @Provides
     @AuthInterceptorImpl
     public static HttpLoggingInterceptor provideLoggingInterceptor() {
         return new HttpLoggingInterceptor()
                 .setLevel(HttpLoggingInterceptor.Level.BODY);
     }
 
-    @Provides
     @Singleton
+    @Provides
     @LoggingInterceptorImpl
     public static AuthInterceptor provideAuthInterceptor() {
         return new AuthInterceptor("gmt", "gmtvision");
     }
 
-    @Provides
     @Singleton
+    @Provides
     @Named("OkHttpClientProvides")
     public static OkHttpClient provideOkHttp(
             @LoggingInterceptorImpl HttpLoggingInterceptor loggingInterceptor,
@@ -102,8 +103,8 @@ public class ApiModule {
                 .build();
     }
 
-    @Provides
     @Singleton
+    @Provides
     @Named("RetrofitProvides")
     public static Retrofit provideRetrofit(
             OkHttpClient client,
@@ -116,10 +117,13 @@ public class ApiModule {
                 .build();
     }
 
-    @Provides
     @Singleton
     @Named("RestServiceProvides")
-    public static RestService provideRestService(Retrofit retrofit) {
+    @ViewModelScoped
+    public static RestService provideRestService(
+            Retrofit retrofit
+    ) {
         return retrofit.create(RestService.class);
     }
 }
+

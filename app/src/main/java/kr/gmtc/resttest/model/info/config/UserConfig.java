@@ -1,14 +1,16 @@
-package kr.gmtc.resttest.model.user;
+package kr.gmtc.resttest.model.info.config;
 
 import com.google.gson.annotations.SerializedName;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class UserConfig {
     @SerializedName("userId") protected String userId;
     @SerializedName("bright") protected Integer bright;

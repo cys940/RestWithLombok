@@ -1,7 +1,6 @@
 package kr.gmtc.resttest;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -11,13 +10,15 @@ import androidx.lifecycle.ViewModelProvider;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import kr.gmtc.resttest.data.RestRepository;
 import kr.gmtc.resttest.databinding.ActivityMainBinding;
-import kr.gmtc.resttest.rest.RestService;
+import kr.gmtc.resttest.ui.RequestAdapter;
+import kr.gmtc.resttest.viewmodel.RestViewModel;
 
 @AndroidEntryPoint
 public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding = null;
-    private RestViewModel viewModel;
+    RestViewModel viewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

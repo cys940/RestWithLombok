@@ -2,6 +2,8 @@ package kr.gmtc.resttest.model.user;
 
 import com.google.gson.annotations.SerializedName;
 
+import kr.gmtc.resttest.model.info.auth.UserAuth;
+import kr.gmtc.resttest.model.info.config.UserConfig;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

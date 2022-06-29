@@ -1,4 +1,4 @@
-package kr.gmtc.resttest;
+package kr.gmtc.resttest.ui;
 
 public interface OnRequestListener {
     void onRequest(String item);

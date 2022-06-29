@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.model.user;
+package kr.gmtc.resttest.model.info.auth;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserAuth {
+    @SerializedName("userId") protected String userId;
     @SerializedName("authId") protected Integer authId;
     @SerializedName("use") protected String use;
     @SerializedName("name") protected String name;

@@ -7,11 +7,11 @@
     <data>
         <variable
             name="adapter"
-            type="kr.gmtc.resttest.RequestAdapter" />
+            type="kr.gmtc.resttest.ui.RequestAdapter" />
 
         <variable
             name="viewModel"
-            type="kr.gmtc.resttest.RestViewModel" />
+            type="kr.gmtc.resttest.viewmodel.RestViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
