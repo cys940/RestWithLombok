@@ -14,10 +14,7 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 import dagger.hilt.InstallIn;
-import dagger.hilt.android.scopes.ViewModelScoped;
-import dagger.hilt.android.scopes.ViewScoped;
 import dagger.hilt.components.SingletonComponent;
-import kr.gmtc.resttest.data.RestRepository;
 import kr.gmtc.resttest.model.equip.Device;
 import kr.gmtc.resttest.model.equip.Ht10;
 import kr.gmtc.resttest.model.equip.MainServer;
@@ -118,8 +115,8 @@ public class ApiModule {
     }
 
     @Singleton
+    @Provides
     @Named("RestServiceProvides")
-    @ViewModelScoped
     public static RestService provideRestService(
             Retrofit retrofit
     ) {
