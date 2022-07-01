@@ -36,11 +36,12 @@ public class RestRepositoryImpl implements RestRepository {
                 .setReadTimeout(3)
                 .setWriteTimeout(3)
                 .setRetryConnect(true)
-                .setRetrofit().getService();
+                .setRetrofit()
+                .getService();
     }
 
     @Override
-    public LiveData<List<Device>> getAllDevices() {
+    public List<Device> getAllDevices() {
         retrofit2.Call<List<Device>> call = service.getAllDevices();
 
         call.enqueue(new Callback<List<Device>>() {
@@ -63,7 +64,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Cctv>> getAllCctvs() {
+    public List<Cctv> getAllCctvs() {
         retrofit2.Call<List<Cctv>> call = service.getAllCctvs();
 
         call.enqueue(new Callback<List<Cctv>>() {
@@ -86,7 +87,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<SystemConfig> getSystemConfig() {
+    public SystemConfig getSystemConfig() {
         retrofit2.Call<SystemConfig> call = service.getSystemConfig();
 
         call.enqueue(new Callback<SystemConfig>() {
@@ -107,7 +108,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<User>> getAllUsers() {
+    public List<User> getAllUsers() {
         retrofit2.Call<List<User>> call = service.getAllUsers();
 
         call.enqueue(new Callback<List<User>>() {
@@ -130,7 +131,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<User> getUser(String userId) {
+    public User getUser(String userId) {
         retrofit2.Call<User> call = service.getUser(userId);
 
         call.enqueue(new Callback<User>() {
@@ -151,7 +152,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Favorite>> getFavorite(String userId) {
+    public List<Favorite> getFavorite(String userId) {
         retrofit2.Call<List<Favorite>> call = service.getFavorite(userId);
 
         call.enqueue(new Callback<List<Favorite>>() {
@@ -174,12 +175,30 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Favorite>> updateFavorite(String userId, List<Favorite> update) {
+    public List<Favorite> updateFavorite(String userId, List<Favorite> update) {
+        retrofit2.Call<List<Favorite>> call = service.updateFavorite(userId, update);
+
+        call.enqueue(new Callback<List<Favorite>>() {
+            @Override
+            public void onResponse(Call<List<Favorite>> call, Response<List<Favorite>> response) {
+                if (response.isSuccessful()) {
+                    for (Favorite favorite : response.body()) {
+                        Log.d(TAG, favorite.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Favorite>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+
         return null;
     }
 
     @Override
-    public LiveData<List<Favorite>> deleteFavorite(String userId, int id) {
+    public List<Favorite> deleteFavorite(String userId, int id) {
         retrofit2.Call<List<Favorite>> call = service.deleteFavorite(userId, id);
 
         call.enqueue(new Callback<List<Favorite>>() {
@@ -201,7 +220,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Group>> getGroupsByGet(String userId) {
+    public List<Group> getGroupsByGet(String userId) {
         retrofit2.Call<List<Group>> call = service.getGroupsByGet(userId);
 
         call.enqueue(new Callback<List<Group>>() {
@@ -222,7 +241,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Group>> getGroupsByPost(String userId, List<Group> groups) {
+    public List<Group> getGroupsByPost(String userId, List<Group> groups) {
         retrofit2.Call<List<Group>> call = service.getGroupsByPost(userId, groups);
 
         call.enqueue(new Callback<List<Group>>() {
@@ -245,7 +264,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Group>> deleteGroups(String userId, String groupId) {
+    public List<Group> deleteGroups(String userId, String groupId) {
         retrofit2.Call<List<Group>> call = service.deleteGroups(userId, groupId);
 
         call.enqueue(new Callback<List<Group>>() {
@@ -266,7 +285,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Group>> updateGroups(String userId) {
+    public List<Group> updateGroups(String userId) {
         retrofit2.Call<List<Group>> call = service.updateGroups(userId);
 
         call.enqueue(new Callback<List<Group>>() {
@@ -288,7 +307,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<MyInfo> getMyInfo(String userId) {
+    public MyInfo getMyInfo(String userId) {
         retrofit2.Call<MyInfo> call = service.getMyInfo(userId);
 
         call.enqueue(new Callback<MyInfo>() {
@@ -309,7 +328,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<WhaleSafe>> getWhaleSafeByGet() {
+    public List<WhaleSafe> getWhaleSafeByGet() {
         retrofit2.Call<List<WhaleSafe>> call = service.getWhaleSafeByGet();
 
         call.enqueue(new Callback<List<WhaleSafe>>() {
@@ -333,7 +352,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<WhaleSafe>> getWhaleSafeByPost(List<WhaleSafe> body) {
+    public List<WhaleSafe> getWhaleSafeByPost(List<WhaleSafe> body) {
         retrofit2.Call<List<WhaleSafe>> call = service.getWhaleSafeByPost(body);
 
         call.enqueue(new Callback<List<WhaleSafe>>() {
@@ -355,7 +374,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<Schedule>> getSchedules(String userId) {
+    public List<Schedule> getSchedules(String userId) {
         retrofit2.Call<List<Schedule>> call = service.getSchedules(userId);
 
         call.enqueue(new Callback<List<Schedule>>() {
@@ -376,7 +395,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<UserConfig> getUserConfigByGet(String userId) {
+    public UserConfig getUserConfigByGet(String userId) {
         retrofit2.Call<UserConfig> call = service.getUserConfigByGet(userId);
 
         call.enqueue(new Callback<UserConfig>() {
@@ -396,7 +415,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<UserConfig> getUserConfigByPost(String userId, UserConfig userConfig) {
+    public UserConfig getUserConfigByPost(String userId, UserConfig userConfig) {
         retrofit2.Call<UserConfig> call = service.getUserConfigByPost(userId, userConfig);
 
         call.enqueue(new Callback<UserConfig>() {
@@ -416,7 +435,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public LiveData<List<UserAuth>> getUserAuths(String userId) {
+    public List<UserAuth> getUserAuths(String userId) {
         retrofit2.Call<List<UserAuth>> call = service.getUserAuths(userId);
 
         call.enqueue(new Callback<List<UserAuth>>() {

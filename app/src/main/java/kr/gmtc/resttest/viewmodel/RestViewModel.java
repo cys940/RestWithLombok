@@ -21,11 +21,11 @@ import kr.gmtc.resttest.model.whale.WhaleSafe;
 @HiltViewModel
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
-    RestRepositoryImpl repository;
+    RestRepositoryImpl repositoryImpl;
 
     @Inject
-    public RestViewModel(RestRepositoryImpl repository){
-        this.repository = repository;
+    public RestViewModel(RestRepositoryImpl repositoryImpl){
+        this.repositoryImpl = repositoryImpl;
     }
 
     private MutableLiveData<List<String>> list;
@@ -113,61 +113,61 @@ public class RestViewModel extends ViewModel {
     public void request(String request) {
         switch (request) {
             case "getAllDevices":
-                repository.getAllDevices();
+                devices.setValue(repositoryImpl.getAllDevices());
                 break;
             case "getAllCctvs":
-                repository.getAllCctvs();
+                repositoryImpl.getAllCctvs();
                 break;
             case "getSystemConfig":
-                repository.getSystemConfig();
+                repositoryImpl.getSystemConfig();
                 break;
             case "getAllUsers":
-                repository.getAllUsers();
+                repositoryImpl.getAllUsers();
                 break;
             case "getUser":
-                repository.getUser("003");
+                repositoryImpl.getUser("003");
                 break;
             case "getFavorite":
-                repository.getFavorite("003");
+                repositoryImpl.getFavorite("003");
                 break;
             case "updateFavorite":
-                repository.updateFavorite("003", null);
+                repositoryImpl.updateFavorite("003", null);
                 break;
             case "deleteFavorite":
-                repository.deleteFavorite("003", 18);
+                repositoryImpl.deleteFavorite("003", 18);
                 break;
             case "getGroupsByGet":
-                repository.getGroupsByGet("003");
+                repositoryImpl.getGroupsByGet("003");
                 break;
             case "getGroupsByPost":
-                repository.getGroupsByPost("003", null);
+                repositoryImpl.getGroupsByPost("003", null);
                 break;
             case "deleteGroups":
-                repository.deleteGroups("003", "1093");
+                repositoryImpl.deleteGroups("003", "1093");
                 break;
             case "updateGroups":
-                repository.updateGroups("003");
+                repositoryImpl.updateGroups("003");
                 break;
             case "getMyInfo":
-                repository.getMyInfo("003");
+                repositoryImpl.getMyInfo("003");
                 break;
             case "getWhaleSafeByGet":
-                repository.getWhaleSafeByGet();
+                repositoryImpl.getWhaleSafeByGet();
                 break;
             case "getWhaleSafeByPost":
-                repository.getWhaleSafeByPost(null);
+                repositoryImpl.getWhaleSafeByPost(null);
                 break;
             case "getSchedules":
-                repository.getSchedules("003");
+                repositoryImpl.getSchedules("003");
                 break;
             case "getUserConfigByGet":
-                repository.getUserConfigByGet("003");
+                repositoryImpl.getUserConfigByGet("003");
                 break;
             case "getUserConfigByPost":
-                repository.getUserConfigByPost("003", null);
+                repositoryImpl.getUserConfigByPost("003", null);
                 break;
             case "getUserAuths":
-                repository.getUserAuths("003");
+                repositoryImpl.getUserAuths("003");
                 break;
         }
     }
