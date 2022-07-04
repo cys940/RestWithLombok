@@ -4,18 +4,23 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import kr.gmtc.resttest.data.Impl.RestRepositoryImpl;
-import kr.gmtc.resttest.model.equip.Device;
-import kr.gmtc.resttest.model.info.config.UserConfig;
-import kr.gmtc.resttest.model.info.favorite.Favorite;
-import kr.gmtc.resttest.model.info.group.Group;
-import kr.gmtc.resttest.model.whale.WhaleSafe;
+import kr.gmtc.resttest.model.iscs.equip.Device;
+import kr.gmtc.resttest.model.iscs.info.config.UserConfig;
+import kr.gmtc.resttest.model.iscs.info.favorite.Favorite;
+import kr.gmtc.resttest.model.iscs.info.group.Group;
+import kr.gmtc.resttest.model.iscs.iss.IssInfo;
+import kr.gmtc.resttest.model.iscs.user.User;
+import kr.gmtc.resttest.model.iscs.whale.WhaleSafe;
 
 
 @HiltViewModel
@@ -91,7 +96,8 @@ public class RestViewModel extends ViewModel {
         samples.add("getAllCctvs");
         samples.add("getSystemConfig");
         samples.add("getAllUsers");
-        samples.add("getUser");
+        samples.add("getUserByGet");
+        samples.add("getUserByPost");
         samples.add("getFavorite");
         samples.add("updateFavorite");
         samples.add("deleteFavorite");
@@ -106,6 +112,16 @@ public class RestViewModel extends ViewModel {
         samples.add("getUserConfigByGet");
         samples.add("getUserConfigByPost");
         samples.add("getUserAuths");
+        samples.add("getCodes");
+        samples.add("getAlarms");
+        samples.add("getReadAlarms");
+        samples.add("getLastInfoByGet");
+        samples.add("getLastInfoByPost");
+        samples.add("getCartes");
+        samples.add("getChannels");
+        samples.add("getIssJob");
+        samples.add("getIssTankSlosh");
+        samples.add("getIssRoute");
 
         list.setValue(samples);
     }
@@ -124,29 +140,53 @@ public class RestViewModel extends ViewModel {
             case "getAllUsers":
                 repositoryImpl.getAllUsers();
                 break;
-            case "getUser":
-                repositoryImpl.getUser("003");
+            case "getUserByGet":
+                repositoryImpl.getUserByGet("003");
+                break;
+            case "getUserByPost":
+                try {
+                    repositoryImpl.getUserByPost("003", User.builder()
+                            .userId("003")
+                            .password("1234")
+                            .userName("HT19")
+                            .callPriority(5)
+                            .cctvPriority(9)
+                            .birthday(new SimpleDateFormat("yyyy-MM-dd").parse("2022-06-16"))
+                            .nation(null)
+                            .admin("1")
+                            .address(null)
+                            .pinNo("9981")
+                            .expireDate(new SimpleDateFormat("yyyy-MM-dd").parse("2099-12-31"))
+                            .build());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 break;
             case "getFavorite":
                 repositoryImpl.getFavorite("003");
                 break;
             case "updateFavorite":
-                repositoryImpl.updateFavorite("003", null);
+                repositoryImpl.updateFavorite("003", Favorite.builder()
+                        .userId("003")
+                        .destType(0)
+                        .destId("224")
+                        .build()
+                );
                 break;
             case "deleteFavorite":
-                repositoryImpl.deleteFavorite("003", 18);
+                repositoryImpl.deleteFavorite("003", 35);
                 break;
             case "getGroupsByGet":
                 repositoryImpl.getGroupsByGet("003");
                 break;
             case "getGroupsByPost":
-                repositoryImpl.getGroupsByPost("003", null);
+                repositoryImpl.getGroupsByPost("003", new ArrayList<Group>());
                 break;
             case "deleteGroups":
-                repositoryImpl.deleteGroups("003", "1093");
+                repositoryImpl.deleteGroups("003", "1096");
                 break;
             case "updateGroups":
-                repositoryImpl.updateGroups("003");
+                repositoryImpl.updateGroups("003", Group.builder().build());
                 break;
             case "getMyInfo":
                 repositoryImpl.getMyInfo("003");
@@ -164,10 +204,69 @@ public class RestViewModel extends ViewModel {
                 repositoryImpl.getUserConfigByGet("003");
                 break;
             case "getUserConfigByPost":
-                repositoryImpl.getUserConfigByPost("003", null);
+                repositoryImpl.getUserConfigByPost("003", UserConfig.builder()
+                        .userId("003")
+                        .bright(10)
+                        .dateType(0)
+                        .timeType(0)
+                        .timeZone(1)
+                        .mainBackground("Main_1.jpg")
+                        .phoneMusic("Ring1.mp3")
+                        .wakeupMusic("wakeup1.mp3")
+                        .alarmMusic("Alarm1.wav")
+                        .notifyMusic("Notify1.wav")
+                        .myMenu1(6)
+                        .myMenu2(8)
+                        .myMenu3(9)
+                        .myMenu4(10)
+                        .myMenu5(11)
+                        .myMenu6(21)
+                        .build()
+                );
                 break;
             case "getUserAuths":
                 repositoryImpl.getUserAuths("003");
+                break;
+            case "getCodes":
+                repositoryImpl.getCodes();
+                break;
+            case "getAlarms":
+                repositoryImpl.getAlarms("003", 0, 30);
+                break;
+            case "getReadAlarms":
+                repositoryImpl.getReadAlarms("003");
+                break;
+            case "getLastInfoByGet":
+                repositoryImpl.getLastInfoByGet();
+                break;
+            case "getLastInfoByPost":
+                repositoryImpl.getLastInfoByPost(
+                        IssInfo.builder()
+                        .id("01-01")
+                        .param1("ST.Vessel.Thing")
+                        .param2("Nameoftheship")
+                        .valueType(2)
+                        .valueD(null)
+                        .valueC("PRISM DIVERSITY")
+                        .valueB(null)
+                        .updateDate(new Date())
+                        .build()
+                );
+                break;
+            case "getCartes":
+                repositoryImpl.getCartes("2022-07-01", "2022-07-31");
+                break;
+            case "getChannels":
+                repositoryImpl.getChannels();
+                break;
+            case "getIssJob":
+                repositoryImpl.getIssJob(3);
+                break;
+            case "getIssTankSlosh":
+                repositoryImpl.getIssTankSlosh();
+                break;
+            case "getIssRoute":
+                repositoryImpl.getIssRoute(3);
                 break;
         }
     }

@@ -55,8 +55,11 @@ dependencies {
     //gson
     implementation 'com.google.code.gson:gson:2.8.9'
 
-    //viewModel/liveData
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.0-rc02"
+    //Paging3 with viewModel
+    implementation "androidx.paging:paging-runtime:3.1.1"
+    implementation "androidx.paging:paging-guava:3.1.1"
+
+    //liveData
     implementation "androidx.lifecycle:lifecycle-livedata:2.5.0-rc02"
 
     //DI-Hilt

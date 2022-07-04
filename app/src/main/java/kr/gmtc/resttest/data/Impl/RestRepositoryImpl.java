@@ -2,21 +2,28 @@ package kr.gmtc.resttest.data.Impl;
 
 import android.util.Log;
 
-import androidx.lifecycle.LiveData;
 
 import java.util.List;
 import kr.gmtc.resttest.data.RestRepository;
-import kr.gmtc.resttest.model.cctv.Cctv;
-import kr.gmtc.resttest.model.cfg.SystemConfig;
-import kr.gmtc.resttest.model.equip.Device;
-import kr.gmtc.resttest.model.info.MyInfo;
-import kr.gmtc.resttest.model.info.auth.UserAuth;
-import kr.gmtc.resttest.model.info.config.UserConfig;
-import kr.gmtc.resttest.model.info.favorite.Favorite;
-import kr.gmtc.resttest.model.info.group.Group;
-import kr.gmtc.resttest.model.info.schedule.Schedule;
-import kr.gmtc.resttest.model.user.User;
-import kr.gmtc.resttest.model.whale.WhaleSafe;
+import kr.gmtc.resttest.model.iscs.carte.MealPlan;
+import kr.gmtc.resttest.model.iscs.cctv.Cctv;
+import kr.gmtc.resttest.model.iscs.cfg.SystemConfig;
+import kr.gmtc.resttest.model.iscs.channel.ChannelEquip;
+import kr.gmtc.resttest.model.iscs.code.Code;
+import kr.gmtc.resttest.model.iscs.equip.Device;
+import kr.gmtc.resttest.model.iscs.info.MyInfo;
+import kr.gmtc.resttest.model.iscs.info.alarm.Alarm;
+import kr.gmtc.resttest.model.iscs.info.auth.UserAuth;
+import kr.gmtc.resttest.model.iscs.info.config.UserConfig;
+import kr.gmtc.resttest.model.iscs.info.favorite.Favorite;
+import kr.gmtc.resttest.model.iscs.info.group.Group;
+import kr.gmtc.resttest.model.iscs.info.schedule.Schedule;
+import kr.gmtc.resttest.model.iscs.iss.IssInfo;
+import kr.gmtc.resttest.model.iscs.user.User;
+import kr.gmtc.resttest.model.iscs.whale.WhaleSafe;
+import kr.gmtc.resttest.model.iss.IssRoute;
+import kr.gmtc.resttest.model.iss.Job;
+import kr.gmtc.resttest.model.iss.TankSlosh;
 import kr.gmtc.resttest.rest.RestClient;
 import kr.gmtc.resttest.rest.RestService;
 import retrofit2.Call;
@@ -131,8 +138,29 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public User getUser(String userId) {
-        retrofit2.Call<User> call = service.getUser(userId);
+    public User getUserByGet(String userId) {
+        retrofit2.Call<User> call = service.getUserByGet(userId);
+
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+
+        return null;
+    }
+
+    @Override
+    public User getUserByPost(String userId, User user) {
+        retrofit2.Call<User> call = service.getUserByPost(userId, user);
 
         call.enqueue(new Callback<User>() {
             @Override
@@ -175,7 +203,7 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public List<Favorite> updateFavorite(String userId, List<Favorite> update) {
+    public List<Favorite> updateFavorite(String userId, Favorite update) {
         retrofit2.Call<List<Favorite>> call = service.updateFavorite(userId, update);
 
         call.enqueue(new Callback<List<Favorite>>() {
@@ -285,8 +313,8 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public List<Group> updateGroups(String userId) {
-        retrofit2.Call<List<Group>> call = service.updateGroups(userId);
+    public List<Group> updateGroups(String userId, Group updateGroup) {
+        retrofit2.Call<List<Group>> call = service.updateGroups(userId, updateGroup);
 
         call.enqueue(new Callback<List<Group>>() {
             @Override
@@ -453,6 +481,221 @@ public class RestRepositoryImpl implements RestRepository {
                 Log.d(TAG, t.getMessage());
             }
         });
+        return null;
+    }
+
+    @Override
+    public List<Code> getCodes() {
+        retrofit2.Call<List<Code>> call = service.getCodes();
+
+        call.enqueue(new Callback<List<Code>>() {
+            @Override
+            public void onResponse(Call<List<Code>> call, Response<List<Code>> response) {
+                if (response.isSuccessful()) {
+                    for (Code code : response.body()){
+                        Log.d(TAG, code.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Code>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<Alarm> getAlarms(String userId, int page, int pageSize) {
+        retrofit2.Call<List<Alarm>> call = service.getAlarms(userId, page, pageSize);
+
+        call.enqueue(new Callback<List<Alarm>>() {
+            @Override
+            public void onResponse(Call<List<Alarm>> call, Response<List<Alarm>> response) {
+                if (response.isSuccessful()) {
+                    for (Alarm alarm : response.body()){
+                        Log.d(TAG, alarm.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Alarm>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<Alarm> getReadAlarms(String userId) {
+        retrofit2.Call<List<Alarm>> call = service.getReadAlarms(userId);
+
+        call.enqueue(new Callback<List<Alarm>>() {
+            @Override
+            public void onResponse(Call<List<Alarm>> call, Response<List<Alarm>> response) {
+                if (response.isSuccessful()) {
+                    for (Alarm alarm : response.body()){
+                        Log.d(TAG, alarm.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Alarm>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<IssInfo> getLastInfoByGet() {
+        retrofit2.Call<List<IssInfo>> call = service.getLastInfoByGet();
+
+        call.enqueue(new Callback<List<IssInfo>>() {
+            @Override
+            public void onResponse(Call<List<IssInfo>> call, Response<List<IssInfo>> response) {
+                if (response.isSuccessful()) {
+                    for (IssInfo issInfo : response.body()){
+                        Log.d(TAG, issInfo.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<IssInfo>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<IssInfo> getLastInfoByPost(IssInfo updateList) {
+        retrofit2.Call<List<IssInfo>> call = service.getLastInfoByPost(updateList);
+
+        call.enqueue(new Callback<List<IssInfo>>() {
+            @Override
+            public void onResponse(Call<List<IssInfo>> call, Response<List<IssInfo>> response) {
+                if (response.isSuccessful()) {
+                    for (IssInfo issInfo : response.body()){
+                        Log.d(TAG, issInfo.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<IssInfo>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<MealPlan> getCartes(String from, String to) {
+        retrofit2.Call<List<MealPlan>> call = service.getCartes(from, to);
+
+        call.enqueue(new Callback<List<MealPlan>>() {
+            @Override
+            public void onResponse(Call<List<MealPlan>> call, Response<List<MealPlan>> response) {
+                if (response.isSuccessful()) {
+                    for (MealPlan mealPlan : response.body()){
+                        Log.d(TAG, mealPlan.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<MealPlan>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public List<ChannelEquip> getChannels() {
+        retrofit2.Call<List<ChannelEquip>> call = service.getChannels();
+
+        call.enqueue(new Callback<List<ChannelEquip>>() {
+            @Override
+            public void onResponse(Call<List<ChannelEquip>> call, Response<List<ChannelEquip>> response) {
+                if (response.isSuccessful()) {
+                    for (ChannelEquip channelEquip : response.body()){
+                        Log.d(TAG, channelEquip.toString());
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<ChannelEquip>> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public Job getIssJob(int no) {
+        retrofit2.Call<Job> call = service.getIssJob(no);
+
+        call.enqueue(new Callback<Job>() {
+            @Override
+            public void onResponse(Call<Job> call, Response<Job> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Job> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public TankSlosh getIssTankSlosh() {
+        retrofit2.Call<TankSlosh> call = service.getIssTankSlosh();
+
+        call.enqueue(new Callback<TankSlosh>() {
+            @Override
+            public void onResponse(Call<TankSlosh> call, Response<TankSlosh> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<TankSlosh> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+        return null;
+    }
+
+    @Override
+    public IssRoute getIssRoute(int no) {
+        retrofit2.Call<IssRoute> call = service.getIssRoute(no);
+
+        call.enqueue(new Callback<IssRoute>() {
+            @Override
+            public void onResponse(Call<IssRoute> call, Response<IssRoute> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, response.body().toString());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<IssRoute> call, Throwable t) {
+                Log.d(TAG, t.getMessage());
+            }
+        });
+
         return null;
     }
 }

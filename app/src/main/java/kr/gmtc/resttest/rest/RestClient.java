@@ -5,12 +5,12 @@ import com.google.gson.GsonBuilder;
 
 import java.util.concurrent.TimeUnit;
 
-import kr.gmtc.resttest.model.equip.Device;
-import kr.gmtc.resttest.model.equip.Ht10;
-import kr.gmtc.resttest.model.equip.MainServer;
-import kr.gmtc.resttest.model.equip.Phone;
-import kr.gmtc.resttest.model.equip.SnmpDevice;
-import kr.gmtc.resttest.model.equip.VideoRecorder;
+import kr.gmtc.resttest.model.iscs.equip.Device;
+import kr.gmtc.resttest.model.iscs.equip.Ht10;
+import kr.gmtc.resttest.model.iscs.equip.MainServer;
+import kr.gmtc.resttest.model.iscs.equip.Phone;
+import kr.gmtc.resttest.model.iscs.equip.SnmpDevice;
+import kr.gmtc.resttest.model.iscs.equip.VideoRecorder;
 import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
