@@ -1,9 +1,9 @@
-package kr.gmtc.resttest.rest;
+package kr.gmtc.resttest.data.remote;
 
 
 import java.util.List;
 
-import kr.gmtc.resttest.model.iscs.carte.MealMenu;
+
 import kr.gmtc.resttest.model.iscs.carte.MealPlan;
 import kr.gmtc.resttest.model.iscs.cctv.Cctv;
 import kr.gmtc.resttest.model.iscs.cfg.SystemConfig;
@@ -74,11 +74,11 @@ public interface RestService {
     @GET("/iscs/myinfo/{userId}")
     Call<MyInfo> getMyInfo(@Path("userId") String userId);
 
-    @GET("/whale/safe")
+    @GET("/iscs/whale/safe")
     Call<List<WhaleSafe>> getWhaleSafeByGet();
 
-    @POST("/whale/safe")
-    Call<List<WhaleSafe>> getWhaleSafeByPost(@Body List<WhaleSafe> body);
+    @POST("/iscs/whale/safe")
+    Call<List<WhaleSafe>> getWhaleSafeByPost(@Body List<WhaleSafe> updateList);
 
     @GET("/iscs/myinfo/{userId}/schedule")
     Call<List<Schedule>> getSchedules(@Path("userId") String userId);

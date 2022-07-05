@@ -4,6 +4,7 @@ import android.util.Log;
 
 
 import java.util.List;
+
 import kr.gmtc.resttest.data.RestRepository;
 import kr.gmtc.resttest.model.iscs.carte.MealPlan;
 import kr.gmtc.resttest.model.iscs.cctv.Cctv;
@@ -24,8 +25,8 @@ import kr.gmtc.resttest.model.iscs.whale.WhaleSafe;
 import kr.gmtc.resttest.model.iss.IssRoute;
 import kr.gmtc.resttest.model.iss.Job;
 import kr.gmtc.resttest.model.iss.TankSlosh;
-import kr.gmtc.resttest.rest.RestClient;
-import kr.gmtc.resttest.rest.RestService;
+import kr.gmtc.resttest.data.remote.RestClient;
+import kr.gmtc.resttest.data.remote.RestService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -380,8 +381,8 @@ public class RestRepositoryImpl implements RestRepository {
     }
 
     @Override
-    public List<WhaleSafe> getWhaleSafeByPost(List<WhaleSafe> body) {
-        retrofit2.Call<List<WhaleSafe>> call = service.getWhaleSafeByPost(body);
+    public List<WhaleSafe> getWhaleSafeByPost(List<WhaleSafe> updateList) {
+        retrofit2.Call<List<WhaleSafe>> call = service.getWhaleSafeByPost(updateList);
 
         call.enqueue(new Callback<List<WhaleSafe>>() {
             @Override
@@ -470,7 +471,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<UserAuth>> call, Response<List<UserAuth>> response) {
                 if (response.isSuccessful()) {
-                    for (UserAuth auth : response.body()){
+                    for (UserAuth auth : response.body()) {
                         Log.d(TAG, auth.toString());
                     }
                 }
@@ -492,7 +493,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<Code>> call, Response<List<Code>> response) {
                 if (response.isSuccessful()) {
-                    for (Code code : response.body()){
+                    for (Code code : response.body()) {
                         Log.d(TAG, code.toString());
                     }
                 }
@@ -514,7 +515,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<Alarm>> call, Response<List<Alarm>> response) {
                 if (response.isSuccessful()) {
-                    for (Alarm alarm : response.body()){
+                    for (Alarm alarm : response.body()) {
                         Log.d(TAG, alarm.toString());
                     }
                 }
@@ -536,7 +537,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<Alarm>> call, Response<List<Alarm>> response) {
                 if (response.isSuccessful()) {
-                    for (Alarm alarm : response.body()){
+                    for (Alarm alarm : response.body()) {
                         Log.d(TAG, alarm.toString());
                     }
                 }
@@ -558,7 +559,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<IssInfo>> call, Response<List<IssInfo>> response) {
                 if (response.isSuccessful()) {
-                    for (IssInfo issInfo : response.body()){
+                    for (IssInfo issInfo : response.body()) {
                         Log.d(TAG, issInfo.toString());
                     }
                 }
@@ -580,7 +581,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<IssInfo>> call, Response<List<IssInfo>> response) {
                 if (response.isSuccessful()) {
-                    for (IssInfo issInfo : response.body()){
+                    for (IssInfo issInfo : response.body()) {
                         Log.d(TAG, issInfo.toString());
                     }
                 }
@@ -602,7 +603,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<MealPlan>> call, Response<List<MealPlan>> response) {
                 if (response.isSuccessful()) {
-                    for (MealPlan mealPlan : response.body()){
+                    for (MealPlan mealPlan : response.body()) {
                         Log.d(TAG, mealPlan.toString());
                     }
                 }
@@ -624,7 +625,7 @@ public class RestRepositoryImpl implements RestRepository {
             @Override
             public void onResponse(Call<List<ChannelEquip>> call, Response<List<ChannelEquip>> response) {
                 if (response.isSuccessful()) {
-                    for (ChannelEquip channelEquip : response.body()){
+                    for (ChannelEquip channelEquip : response.body()) {
                         Log.d(TAG, channelEquip.toString());
                     }
                 }

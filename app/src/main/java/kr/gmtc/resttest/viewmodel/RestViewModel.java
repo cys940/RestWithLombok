@@ -26,14 +26,15 @@ import kr.gmtc.resttest.model.iscs.whale.WhaleSafe;
 @HiltViewModel
 public class RestViewModel extends ViewModel {
     private static final String TAG = "RestViewModel";
-    RestRepositoryImpl repositoryImpl;
+    private RestRepositoryImpl repositoryImpl;
 
     @Inject
-    public RestViewModel(RestRepositoryImpl repositoryImpl){
+    public RestViewModel(RestRepositoryImpl repositoryImpl) {
         this.repositoryImpl = repositoryImpl;
     }
 
     private MutableLiveData<List<String>> list;
+
     public LiveData<List<String>> getAll() {
         if (list == null) {
             list = new MutableLiveData<List<String>>();
@@ -43,6 +44,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<String> log = new MutableLiveData<>();
+
     public LiveData<String> getCurrentLog() {
         if (log == null) {
             log = new MutableLiveData<String>();
@@ -51,6 +53,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<Device>> devices = new MutableLiveData<>();
+
     public LiveData<List<Device>> getDevices() {
         if (devices == null) {
             devices = new MutableLiveData<List<Device>>();
@@ -59,6 +62,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<Favorite>> _Favorites = new MutableLiveData<>();
+
     public LiveData<List<Favorite>> getFavorites() {
         if (_Favorites == null) {
             _Favorites = new MutableLiveData<List<Favorite>>();
@@ -67,6 +71,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<WhaleSafe>> _whaleSafes = new MutableLiveData<>();
+
     public LiveData<List<WhaleSafe>> getWhaleSafes() {
         if (_whaleSafes == null) {
             _whaleSafes = new MutableLiveData<List<WhaleSafe>>();
@@ -75,6 +80,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<UserConfig> _userConfig = new MutableLiveData<>();
+
     public LiveData<UserConfig> getUserConfig() {
         if (_userConfig == null) {
             _userConfig = new MutableLiveData<UserConfig>();
@@ -83,6 +89,7 @@ public class RestViewModel extends ViewModel {
     }
 
     private MutableLiveData<List<Group>> _groups = new MutableLiveData<>();
+
     public LiveData<List<Group>> getGroups() {
         if (_groups == null) {
             _groups = new MutableLiveData<List<Group>>();
@@ -242,15 +249,15 @@ public class RestViewModel extends ViewModel {
             case "getLastInfoByPost":
                 repositoryImpl.getLastInfoByPost(
                         IssInfo.builder()
-                        .id("01-01")
-                        .param1("ST.Vessel.Thing")
-                        .param2("Nameoftheship")
-                        .valueType(2)
-                        .valueD(null)
-                        .valueC("PRISM DIVERSITY")
-                        .valueB(null)
-                        .updateDate(new Date())
-                        .build()
+                                .id("01-01")
+                                .param1("ST.Vessel.Thing")
+                                .param2("Nameoftheship")
+                                .valueType(2)
+                                .valueD(null)
+                                .valueC("PRISM DIVERSITY")
+                                .valueB(null)
+                                .updateDate(new Date())
+                                .build()
                 );
                 break;
             case "getCartes":

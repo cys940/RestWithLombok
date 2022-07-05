@@ -1,4 +1,4 @@
-package kr.gmtc.resttest.rest;
+package kr.gmtc.resttest.data.remote;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
