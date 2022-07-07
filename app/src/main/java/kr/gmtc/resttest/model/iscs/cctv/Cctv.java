@@ -20,6 +20,7 @@ public class Cctv {
     @SerializedName("password") protected String password;
     @SerializedName("cctvType") protected Integer cctvType;
     @SerializedName("commandType") protected Integer commandType;
+    @SerializedName("channel") protected Integer channel;
     @SerializedName("rtsp") protected String rtsp;
     @SerializedName("speedP") protected Integer speedP;
     @SerializedName("speedT") protected Integer speedT;
