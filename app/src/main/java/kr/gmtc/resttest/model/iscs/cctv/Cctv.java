@@ -18,8 +18,11 @@ public class Cctv {
     @SerializedName("id") protected String id;
     @SerializedName("userId") protected String userId;
     @SerializedName("password") protected String password;
+    /** CCTV 연결 방식 (IP, Serial)
     @SerializedName("cctvType") protected Integer cctvType;
+    /** 명령 프로토콜 (REST, Pelco-D, etc)**/
     @SerializedName("commandType") protected Integer commandType;
+    @SerializedName("channel") protected int channel;
     @SerializedName("rtsp") protected String rtsp;
     @SerializedName("speedP") protected Integer speedP;
     @SerializedName("speedT") protected Integer speedT;
